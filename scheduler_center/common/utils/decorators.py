@@ -1,0 +1,12 @@
+#!/usr/bin/env python 2.6.6
+#coding:utf-8
+
+def singleton(cls):
+    
+    instances = {}
+    
+    def _singleton(*args, **kw):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kw)
+        return instances[cls]
+    return _singleton
