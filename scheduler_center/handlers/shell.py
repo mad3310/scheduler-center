@@ -4,7 +4,7 @@
 import logging
 
 from base import APIHandler
-from common.cron_trigger import TriggerOpers
+from common.cron_trigger_opers import TriggerOpers
 from common.queue_opers import QueueOpers
 from job.job_opers.http_request_job import HttpRequestJob
 from tornado.options import options
@@ -32,7 +32,7 @@ class HandlerShellTask(APIHandler):
         get_job_dict, cron_dict = {}, {}
         
         args = self.get_all_arguments()
-        result, params =  self.__verify_params(args)
+        result, params = self.__verify_params(args)
         if not self.__verify_params(args):
             raise HTTPAPIError(status_code=400, error_detail="params are not enough!",\
                                 notification = "direct", \

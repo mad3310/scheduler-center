@@ -8,7 +8,7 @@ Created on 2015-2-4
 '''
 
 from abstract_job import AbstractJob
-from job.utils.http_request import http_get
+from common.utils.http_request import http_get
 
 
 class HttpRequestJob(AbstractJob):

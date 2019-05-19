@@ -25,7 +25,6 @@ class HttpRequestOpers():
         
         #queue_opers = QueueOpers(queue_name)
         scheduler = SchedulerOpers(options.redis_jobstore, options.redis_runtime, options.redis_host, options.redis_port)
-        #from common.ex import hello
-        
+
         #scheduler.add_job(enqueue, trigger, HttpRequestJob(get_job_dict).run, queue_name)
         scheduler.add_job(enqueue, trigger, run_script, queue_name, get_job_dict)

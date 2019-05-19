@@ -8,7 +8,7 @@ Created on 2015-2-4
 '''
 
 from abstract_job import AbstractJob
-from utils.invoke_command import InvokeCommand
+from common.utils.invoke_command import InvokeCommand
 
 class ShellJob(AbstractJob):
     

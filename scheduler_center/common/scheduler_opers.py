@@ -40,8 +40,7 @@ from utils.decorators import singleton
 
 
 def start_scheduler_server():
-    scheduler_opers_obj = SchedulerOpers(options.redis_jobstore, options.redis_runtime,\
-                                         options.redis_host, options.redis_port)
+    scheduler_opers_obj = SchedulerOpers(options.redis_jobstore, options.redis_runtime, options.redis_host, options.redis_port)
     scheduler_opers_obj.start()
 
 
