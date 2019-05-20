@@ -13,6 +13,8 @@ base_dir = os.path.abspath(dirname(dirname(dirname(__file__))))
 define("base_dir", default=base_dir, help="project base dir")
 define('debug', default=False, type=bool, help='is debuging?')
 define('port', default=8000, type=int, help='app listen port')
+define('sitename', default="scheduler-center", help='project name')
+
 
 define('send_email_switch', default=True, type=bool, help='the flag of if send error email')
 define('admins', default=("zhoubingzheng <zhoubingzheng@letv.com>", ), help='admin email address')

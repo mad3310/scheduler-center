@@ -5,15 +5,15 @@ from tornado.web import RequestHandler,HTTPError
 from tornado import escape
 from tornado.options import options
 
-from common.utils.exceptions import HTTPAPIError
-from common.utils.mail import send_email
+from scheduler_center.common.utils.exceptions import HTTPAPIError
+from scheduler_center.common.utils.mail import send_email
 
 import logging
 import traceback
 
 class BaseHandler(RequestHandler):
     
-    logger = logging.getLogger('root')
+    logger = logging.getLogger('error')
 
     def get_all_arguments(self):
         request_param = {}
@@ -66,6 +66,7 @@ class APIHandler(BaseHandler):
 
             if status_code == 500 and not debug:
                 self.logger.error(e)
+                self.logger.error(exception)
                 self._send_error_email(exception)
 
             if debug:

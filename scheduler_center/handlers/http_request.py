@@ -1,13 +1,13 @@
-#!/usr/bin/env python 2.6.6
-#coding:utf-8
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
 
 import logging
 
 from base import APIHandler
 
 from tornado.options import options
-from common.http_request_opers import HttpRequestOpers
-from common.utils.exceptions import CommonException, HTTPAPIError
+from scheduler_center.common.http_request_opers import HttpRequestOpers
+from scheduler_center.common.utils.exceptions import CommonException, HTTPAPIError
 
 
 class HandlerRequestTask(APIHandler):
@@ -29,7 +29,6 @@ class HandlerRequestTask(APIHandler):
         cron_key = cron_set.pop()
         logging.info('get cron key:%s' % cron_key)
         if not cron_key:
-            logging.error('wrong here')
             raise CommonException('cron trigger params are not supplied!')
            
         cron_value = args.get(cron_key)
@@ -44,7 +43,9 @@ class HandlerRequestTask(APIHandler):
         return params
     
     def post(self):
-        """params include: url, 'cron' or 'interval' or 'date', priority 
+        """params include: url, 'cron' or 'interval' or 'date', priority
+
+            call example:curl "http://127.0.0.1:8000/task/request" -X POST -d "url=http://www.baidu.com&interval=2&priority=1"
         
         """
         

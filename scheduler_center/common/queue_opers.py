@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding:gbk
+#-*- coding: utf-8 -*-
 
 
 from redis import Redis
@@ -14,29 +14,8 @@ except ImportError:
 
 redis_con = None
 
-#@singleton
-class QueueOpers():
-    
-    def __init__(self, name):
-        self.init_redis_con()
-        #self.redis_con = Redis(host=options.redis_host, port=options.redis_port)
-        self.queue = Queue(name=name, connection=self.redis_con)
-    
-    def init_redis_con(self):
-        global redis_con
-        if redis_con:
-            self.redis_con = redis_con
-        else:
-            self.redis_con = Redis(host=options.redis_host, port=options.redis_port)
-            redis_con = self.redis_con
-        
-    def enqueue(self, func, *args, **kwargs):
-        job = self.queue.enqueue(f=func, args=args, kwargs=kwargs)
-        return job
-
-
-def enqueue(func, queue_name, *args, **kwargs):
+def enqueue(queue_name, *args, **kwargs):
     redis_conn = Redis(host=options.redis_host, port=options.redis_port)
     q = Queue(name=queue_name, connection=redis_conn)
-    job = q.enqueue(func, *args, **kwargs)
+    job = q.enqueue('scheduler_worker.job.job_opers.client_job_factory.client_job_run', *args, **kwargs)
     return job
