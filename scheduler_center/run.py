@@ -12,7 +12,6 @@ import logging.config
 
 from tornado.options import options
 from common.appdefine import app_define
-from common.scheduler_opers import SchedulerOpers, start_scheduler_server
 
 
 class Application(tornado.web.Application):
@@ -28,9 +27,6 @@ class Application(tornado.web.Application):
 def main():
     config_path = os.path.join(options.base_dir, "config")
     logging.config.fileConfig(config_path + '/logging.conf')
-    
-    logging.info('scheduler server starts')
-    start_scheduler_server()
 
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())

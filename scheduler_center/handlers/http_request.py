@@ -4,16 +4,15 @@
 import logging
 
 from base import APIHandler
-
 from tornado.options import options
-from scheduler_center.common.http_request_opers import HttpRequestOpers
 from scheduler_center.common.utils.exceptions import CommonException, HTTPAPIError
+from scheduler_center.common.scheduler_opers import SchedulerOpers
+from scheduler_center.common.cron_trigger_opers import TriggerOpers
+from scheduler_center.common.queue_opers import enqueue
 
 
-class HandlerRequestTask(APIHandler):
-    
-    http_request_opers = HttpRequestOpers()
-    
+class HandlerTask(APIHandler):
+
     def __verify_params(self, args):
         """check params legality
         
@@ -41,11 +40,25 @@ class HandlerRequestTask(APIHandler):
          
         params = (queue_name, url, cron)
         return params
+
+    def __add_http_job(self, params):
+
+        queue_name, url, cron = params
+        cron_trigger_opers = TriggerOpers(cron)
+        trigger = cron_trigger_opers.get_trigger()
+
+        job_dict = {}
+        job_dict.setdefault('job_type', 'httpRequest')
+        job_dict.setdefault('url', url)
+        job_dict.setdefault('http_method', 'get')
+
+        SchedulerOpers.instance().add_job(enqueue, trigger, queue_name, job_dict)
     
     def post(self):
         """params include: url, 'cron' or 'interval' or 'date', priority
 
-            call example:curl "http://127.0.0.1:8000/task/request" -X POST -d "url=http://www.baidu.com&interval=2&priority=1"
+            call example:
+               curl "http://127.0.0.1:8000/task/" -X POST -d "url=http://scot.gome.inc/cb/api/execution/ping&interval=10seconds&priority=1"
         
         """
         
@@ -60,8 +73,24 @@ class HandlerRequestTask(APIHandler):
                                 response =  "please check params!")
         
         logging.info('get params:%s' % str(params) )
-        self.http_request_opers.add_http_job(params)
+        self.__add_http_job(params)
         
         result = {}
         result.setdefault('message', 'add job in queue :%s successfully!' % options.queue_http_request)
+        self.finish(result)
+
+
+    def get(self):
+        """
+        retrieve all secheduler jobs
+
+        call example:
+            curl "http://127.0.0.1:8000/task/"
+
+        :return:
+        """
+        jobs = SchedulerOpers.instance().get_all_job()
+
+        result = {}
+        result.setdefault('message', 'scheduler all jobs: %s' % jobs)
         self.finish(result)

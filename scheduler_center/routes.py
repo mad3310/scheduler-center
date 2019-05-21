@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from handlers.http_request import HandlerRequestTask
+from handlers.http_request import HandlerTask
 
 handlers = [
-    (r"/task/request", HandlerRequestTask),
+    (r"/task/", HandlerTask),
+    (r"/task/{id}", HandlerTask),
 ]
