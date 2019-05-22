@@ -31,6 +31,5 @@ define("redis_port", default=6379, help="redis host to port")
 define("redis_jobstore", default="scheduler.jobs", help="name of redis jobstroe")
 define("redis_runtime_key", default='scheduler.runtimekey', help="key of redis runtime")
 
-define("queue_urgent", default="webportal_urgent", help="redis queue to store urgent job")
-define("queue_http_request", default="webportal_get", help="redis queue to store get request job")
-define("queue_shell", default="webportal_shell", help="redis queue to store run shell job")
+define("queue_urgent", default="task_urgent", help="redis queue to store urgent job")
+define("queue_http_request", default="task_http", help="redis queue to store get request job")

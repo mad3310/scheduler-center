@@ -5,5 +5,5 @@ from handlers.http_request import HandlerTask
 
 handlers = [
     (r"/task/", HandlerTask),
-    (r"/task/{id}", HandlerTask),
+    (r"/task/(.*)", HandlerTask),
 ]

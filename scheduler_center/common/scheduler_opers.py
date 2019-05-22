@@ -4,9 +4,11 @@
 import time
 import threading
 import logging
+from pytz import utc
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.jobstores.redis import RedisJobStore
+from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from tornado.options import options
 
 
@@ -16,28 +18,44 @@ class SchedulerOpers(object):
     _instance_lock = threading.Lock()
  
     def __init__(self, jobs_key=None, run_times_key=None, host=None, port=None):
-         self._scheduler = TornadoScheduler()
-         self.redis_js = RedisJobStore(jobs_key=jobs_key, run_times_key=run_times_key, host=host, port=port)
-         self._scheduler.add_jobstore(self.redis_js)
-         logging.info('scheduler server starts')
-         self._scheduler.start()
+        jobstores = {
+            'default': RedisJobStore(jobs_key=jobs_key, run_times_key=run_times_key, host=host, port=port)
+        }
+        executors = {
+            'default': {'type': 'threadpool', 'max_workers': 20},
+            'processpool': ProcessPoolExecutor(max_workers=5)
+        }
+        job_defaults = {
+            'coalesce': False,
+            'max_instances': 3
+        }
+        self._scheduler = TornadoScheduler()
+        self._scheduler.configure(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
+        self._scheduler.start()
  
     def add_job(self, func, trigger, *args, **kwargs):
-        print(self._scheduler)
-        self._scheduler.add_job(func, trigger, args=args, kwargs=kwargs)
+
+        project_code = kwargs.get('project_code')
+        task_name = kwargs.get('task_name')
+        job_name = "%s-%s" % (project_code, task_name)
+
+        self._scheduler.add_job(func, trigger, args=args, kwargs=kwargs, name=job_name)
 
 
     def start(self):
         self._scheduler.start()
-        print(self._scheduler)
-        print(self._scheduler.running)
 
     def get_all_job(self):
-        jobs = self._scheduler.get_jobs(self.redis_js)
-        print self._scheduler
-        print self._scheduler.print_jobs(self.redis_js)
-        print self._scheduler.running
+        jobs = self._scheduler.get_jobs()
+        if jobs:
+            for job in jobs:
+                print(u'    %s' % job)
+
+
         return jobs
+
+    def remove_job(self, job_id):
+        self._scheduler.remove_job(job_id)
 
     @staticmethod
     def instance():
