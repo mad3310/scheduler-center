@@ -5,10 +5,10 @@ import logging
 
 from base import APIHandler
 from tornado.options import options
-from scheduler_center.common.utils.exceptions import CommonException, HTTPAPIError
-from scheduler_center.common.scheduler_opers import SchedulerOpers
-from scheduler_center.common.cron_trigger_opers import TriggerOpers
-from scheduler_center.common.queue_opers import enqueue
+from schedulercenter.common.utils.exceptions import CommonException, HTTPAPIError
+from schedulercenter.common.scheduler_opers import SchedulerOpers
+from schedulercenter.common.cron_trigger_opers import TriggerOpers
+from schedulercenter.common.queue_opers import enqueue
 
 
 class HandlerTask(APIHandler):
@@ -72,7 +72,7 @@ class HandlerTask(APIHandler):
         """params include: url, 'cron' or 'interval' or 'date', priority
 
             call example:
-               curl "http://127.0.0.1:8000/task/" -X POST -d "url=http://scot.gome.inc/cb/api/execution/ping&interval=10seconds&priority=1"
+               curl "http://127.0.0.1:8000/task/" -X POST -d "url=http://scot.gome.inc/cb/api/execution/ping&interval=10seconds&priority=1&projectcode=test&taskname=baidutest&jobtype=httpRequestAccessInterface"
         
         """
         

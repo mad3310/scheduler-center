@@ -5,8 +5,8 @@ from tornado.web import RequestHandler,HTTPError
 from tornado import escape
 from tornado.options import options
 
-from scheduler_center.common.utils.exceptions import HTTPAPIError
-from scheduler_center.common.utils.mail import send_email
+from schedulercenter.common.utils.exceptions import HTTPAPIError
+from schedulercenter.common.utils.mail import send_email
 
 import logging
 import traceback
