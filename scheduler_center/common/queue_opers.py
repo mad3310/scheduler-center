@@ -18,5 +18,5 @@ def enqueue(queue_name, *args, **kwargs):
     kwargs.setdefault('ttl', 43)
     kwargs.setdefault('result_ttl', 10)
 
-    job = q.enqueue('scheduler_worker.job.job_opers.client_job_factory.client_job_run', *args, **kwargs)
+    job = q.enqueue('schedulerworker.job.job_opers.client_job_factory.client_job_run', *args, **kwargs)
     return job
